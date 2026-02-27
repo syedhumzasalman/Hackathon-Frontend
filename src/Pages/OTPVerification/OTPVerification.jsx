@@ -83,7 +83,8 @@ const OTPVerification = () => {
                 email: userEmail,
             }
 
-            const response = await axios.post("http://localhost:3000/api/reset-otp", resetOTP)
+            const baseURL = import.meta.env.VITE_BASE_URL
+            const response = await axios.post(`${baseURL}api/reset-otp`, resetOTP)
             // console.log("response", response);
 
             if (response.data.message == "Sent OTP Please check you email") {
