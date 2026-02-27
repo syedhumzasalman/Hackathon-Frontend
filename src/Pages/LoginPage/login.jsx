@@ -52,6 +52,9 @@ const Login = ({ setUser }) => {
           setUserEmailLogin("")
           setUserPasswordLogin("")
           localStorage.setItem("token", response?.data?.token);
+
+          // Save user info
+          localStorage.setItem("user", JSON.stringify(response?.data?.data));
           navigate("/dashboard")
         });
 
