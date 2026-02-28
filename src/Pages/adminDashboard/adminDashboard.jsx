@@ -5,60 +5,76 @@ import Swal from 'sweetalert2'
 
 
 const NAV_ITEMS = [
-  { icon: "◈", label: "Profile", active: false },
-  { icon: "◎", label: "History", active: false },
+    { icon: "◈", label: "Dashboard", active: false },
+    { icon: "◎", label: "Patients", active: false },
+    { icon: "◎", label: "Appointments", active: false },
+];
+
+const STATS = [
+    { label: "Total Appointments", value: "20",  icon: "◈" },
+    { label: "Pending Appointments", value: "15", icon: "◉" },
+    { label: "Confirmed Appointments", value: "19",  icon: "◬" },
+    { label: "Completed Appointments", value: "05", icon: "◌" },
+];
+
+const ACTIVITIES = [
+    { user: "Elena M.", action: "pushed to production", time: "2m ago", avatar: "E" },
+    { user: "Jonas K.", action: "reviewed pull request #88", time: "14m ago", avatar: "J" },
+    { user: "Priya S.", action: "updated design tokens", time: "1h ago", avatar: "P" },
+    { user: "Luca B.", action: "closed 3 critical bugs", time: "3h ago", avatar: "L" },
+    { user: "You", action: "deployed v2.4.1", time: "5h ago", avatar: "Y" },
 ];
 
 
 
-export default function Dashboard() {
-  const [open, setOpen] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [userRole, setUserRole] = useState("");
-  const [activeNav, setActiveNav] = useState(0);
-  const [mounted, setMounted] = useState(false);
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+export default function AdminiDashboard() {
+    const [open, setOpen] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [userRole, setUserRole] = useState("");
+    const [activeNav, setActiveNav] = useState(0);
+    const [mounted, setMounted] = useState(false);
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      if (user?.firstName) setUserName(user.firstName);
-      if (user?.role) setUserRole(user.role);
-    } catch (err) {
-      console.error("Error parsing user data:", err);
-    }
-  }, []);
+    useEffect(() => {
+        setMounted(true);
+        try {
+            if (user?.firstName) setUserName(user.firstName);
+            if (user?.role) setUserRole(user.role);
+        } catch (err) {
+            console.error("Error parsing user data:", err);
+        }
+    }, []);
 
-  const handleLogout = () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You will be logged out from your account.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#9ca3af",
-      confirmButtonText: "Yes, logout",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        localStorage.clear();
-        navigate("/login");
+    const handleLogout = () => {
         Swal.fire({
-          icon: "success",
-          title: "Logged out!",
-          text: "You have been successfully logged out.",
-          timer: 1500,
-          showConfirmButton: false,
+            title: "Are you sure?",
+            text: "You will be logged out from your account.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#9ca3af",
+            confirmButtonText: "Yes, logout",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear();
+                navigate("/login");
+                Swal.fire({
+                    icon: "success",
+                    title: "Logged out!",
+                    text: "You have been successfully logged out.",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+            }
         });
-      }
-    });
-  };
+    };
 
 
-  return (
-    <>
-      <style>{`
+    return (
+        <>
+            <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -597,137 +613,150 @@ export default function Dashboard() {
 }
       `}</style>
 
-      <div className="dash-root">
-        {/* Ambient orbs */}
-        <div className="orb orb1" />
-        <div className="orb orb2" />
+            <div className="dash-root">
+                {/* Ambient orbs */}
+                <div className="orb orb1" />
+                <div className="orb orb2" />
 
-        {/* Sidebar */}
-        <aside className={`sidebar ${open ? "open" : ""}`}>
-          <div className="sidebar-logo">
-            <div className="logo-mark">
-              <div className="logo-hex">c</div>
-              <div className="logo-text">AI<span>Clinic</span></div>
-            </div>
-          </div>
-
-          <nav className="sidebar-nav">
-            {NAV_ITEMS.map((item, i) => (
-              <div
-                key={i}
-                className={`nav-item ${activeNav === i ? "active" : ""}`}
-                onClick={() => { setActiveNav(i); setOpen(false); }}
-              >
-                <span className="nav-icon">{item.icon}</span>
-                {item.label}
-              </div>
-            ))}
-          </nav>
-
-          <div className="sidebar-footer">
-            <div className="user-card">
-              <div className="user-avatar-sm">{userName?.[0] || "U"}</div>
-              <div className="user-info-sm">
-                <div className="user-name-sm">{userName || "User"}</div>
-                <div className="user-role-sm">{userRole || "User"}</div>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* Mobile overlay */}
-        {open && <div className="sidebar-overlay" onClick={() => setOpen(false)} />}
-
-        {/* Main */}
-        <main className="main">
-          {/* Header */}
-          <header className="header">
-            <div className="header-left">
-              <button className="menu-btn" onClick={() => setOpen(true)}>☰</button>
-              <div>
-                <div className="header-title">Overview</div>
-              </div>
-            </div>
-
-            <div className="header-right">
-              <div className="greeting">
-                Hey, <span>{userName || "User"}</span> 👋
-              </div>
-
-              <button className="logout-btn" onClick={handleLogout}>
-                ⎋ Logout
-              </button>
-            </div>
-          </header>
-
-          {/* Content */}
-          <div className="content">
-            <div className="page-heading">
-              <h2>MY <span>PROFILE</span></h2>
-              <div className="page-date">
-                {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-              </div>
-            </div>
-
-
-            {/* Book Appoinment */}
-
-
-
-              <div className="profile-grid">
-                <div className="profile-card">
-                  <div className="profile-header">
-                    <h3>My Profile</h3>
-                    <span className="badge">Verified</span>
-                  </div>
-
-                  <div className="profile-body">
-                    <div className="row"><span className="label">Name</span><span className="value">{user?.firstName || "Not Available"}</span></div>
-                    <div className="row"><span className="label">Last Name</span><span className="value">{user?.lastName || "Not Available"}</span></div>
-                    <div className="row"><span className="label">Age</span><span className="value">{user?.age || "Not Available"}</span></div>
-                    <div className="row"><span className="label">Role</span><span className="value">{user?.role || "Not Available"}</span></div>
-                  </div>
-                </div>
-
-                <div className="profile-card">
-                  <div className="profile-header">
-                    <h3>Prescriptions</h3>
-                    <span className="badge">PDF</span>
-                  </div>
-
-                  <div className="table">
-                    <div className="table-head">
-                      <span>Date</span>
-                      <span>Doctor</span>
-                      <span>Diagnosis</span>
+                {/* Sidebar */}
+                <aside className={`sidebar ${open ? "open" : ""}`}>
+                    <div className="sidebar-logo">
+                        <div className="logo-mark">
+                            <div className="logo-hex">c</div>
+                            <div className="logo-text">AI<span>Clinic</span></div>
+                        </div>
                     </div>
 
-                    <div className="table-row">
-                      <span>Feb 25, 2026</span>
-                      <span>Dr. Ayesha</span>
-                      <span className="chip">Viral Fever</span>
-                    </div>
+                    <nav className="sidebar-nav">
+                        {NAV_ITEMS.map((item, i) => (
+                            <div
+                                key={i}
+                                className={`nav-item ${activeNav === i ? "active" : ""}`}
+                                onClick={() => { setActiveNav(i); setOpen(false); }}
+                            >
+                                <span className="nav-icon">{item.icon}</span>
+                                {item.label}
+                            </div>
+                        ))}
+                    </nav>
 
-                    <div className="table-row">
-                      <span>Jan 10, 2026</span>
-                      <span>Dr. Salman</span>
-                      <span className="chip">Allergy</span>
+                    <div className="sidebar-footer">
+                        <div className="user-card">
+                            <div className="user-avatar-sm">{userName?.[0] || "U"}</div>
+                            <div className="user-info-sm">
+                                <div className="user-name-sm">{userName || "User"}</div>
+                                <div className="user-role-sm">{userRole || "User"}</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </aside>
 
-                  <div className="ai-box">
-                    <div>
-                      <p className="ai-title">AI Explanation</p>
-                      <p className="ai-sub">See simple guidance (Urdu mode)</p>
-                    </div>
-                    <button className="ai-btn">View Explanation</button>
-                  </div>
-                </div>
-              </div>
+                {/* Mobile overlay */}
+                {open && <div className="sidebar-overlay" onClick={() => setOpen(false)} />}
+
+                {/* Main */}
+                <main className="main">
+                    {/* Header */}
+                    <header className="header">
+                        <div className="header-left">
+                            <button className="menu-btn" onClick={() => setOpen(true)}>☰</button>
+                            <div>
+                                <div className="header-title">Overview</div>
+                            </div>
+                        </div>
+
+                        <div className="header-right">
+                            <div className="greeting">
+                                Hey, <span>{userName || "Admin"}</span> 👋
+                            </div>
+
+                            <button className="logout-btn" onClick={handleLogout}>
+                                ⎋ Logout
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Content */}
+                    <div className="content">
+                        <div className="page-heading">
+                            <h2>ADMIN <span>DASHBOARD</span></h2>
+                            <div className="page-date">
+                                {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+                            </div>
+                        </div>  
+
+                        {/* Stats */}
+                        <div className="stats-grid">
+                            {STATS.map((s, i) => (
+                                <div className="stat-card" key={i}>
+                                    <div className="stat-top">
+                                        <div className="stat-icon">{s.icon}</div>
+                                        <div className={`stat-delta ${s.up ? "up" : "down"}`}>{s.delta}</div>
+                                    </div>
+                                    <div className="stat-value">{s.value}</div>
+                                    <div className="stat-label">{s.label}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Bottom */}
+                        {/* <div className="bottom-grid">
+                            <div className="card">
+                                <div className="card-header">
+                                    <div className="card-title">Recent Activity</div>
+                                    <div className="card-badge">Live</div>
+                                </div>
+                                <div className="activity-list">
+                                    {ACTIVITIES.map((a, i) => (
+                                        <div className="activity-item" key={i}>
+                                            <div className="act-avatar" style={{ background: `linear-gradient(135deg, hsl(${i * 60}, 70%, 60%), hsl(${i * 60 + 30}, 70%, 50%))` }}>
+                                                {a.avatar}
+                                            </div>
+                                            <div className="act-info">
+                                                <div className="act-user">{a.user}</div>
+                                                <div className="act-action">{a.action}</div>
+                                            </div>
+                                            <div className="act-time">{a.time}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <div className="card-header">
+                                    <div className="card-title">Sprint Progress</div>
+                                    <div className="card-badge">Q1 2025</div>
+                                </div>
+                                <div className="progress-section">
+                                    {[
+                                        { label: "Backend API", val: 87, color: "linear-gradient(90deg, #5affd4, #2dd4bf)" },
+                                        { label: "Frontend UI", val: 74, color: "linear-gradient(90deg, #818cf8, #6366f1)" },
+                                        { label: "Testing", val: 52, color: "linear-gradient(90deg, #fbbf24, #f59e0b)" },
+                                        { label: "Documentation", val: 38, color: "linear-gradient(90deg, #f87171, #ef4444)" },
+                                        { label: "Deployment", val: 21, color: "linear-gradient(90deg, #a78bfa, #8b5cf6)" },
+                                    ].map((p, i) => (
+                                        <div className="progress-item" key={i}>
+                                            <div className="progress-top">
+                                                <div className="progress-label">{p.label}</div>
+                                                <div className="progress-val">{p.val}%</div>
+                                            </div>
+                                            <div className="progress-bar-track">
+                                                <div
+                                                    className="progress-bar-fill"
+                                                    style={{ width: mounted ? `${p.val}%` : "0%", background: p.color }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div> */}
+
+
 
             </div>
-        </main>
-      </div>
-    </>
-  );
+        </main >
+            </div >
+        </>
+    );
 }

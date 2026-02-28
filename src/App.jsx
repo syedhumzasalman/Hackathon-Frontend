@@ -8,6 +8,7 @@ import Login from "../src/Pages/LoginPage/login"
 import Dashboard from "../src/Pages/Dashboard/dashboard"
 import NotFound from "../src/Pages//NotFound/NotFound"
 import OTPVerification from './Pages/OTPVerification/OTPVerification'
+import AdminiDashboard from './Pages/adminDashboard/adminDashboard'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin-dashboard" element={<AdminiDashboard   />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

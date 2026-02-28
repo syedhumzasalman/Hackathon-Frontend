@@ -6,6 +6,7 @@ import axios from 'axios'
 
 const Login = ({ setUser }) => {
 
+
   const [userEmailLogin, setUserEmailLogin] = useState("")
   const [userPasswordLogin, setUserPasswordLogin] = useState("")
   const navigate = useNavigate();
@@ -41,22 +42,40 @@ const Login = ({ setUser }) => {
 
       const baseURL = import.meta.env.VITE_BASE_URL
       const response = await axios.post(`${baseURL}api/login`, uerObj)
-      console.log("response", response);
+      // console.log("response", response);
 
-      if (response?.data?.message == "User Successfully Login")
+      if (response?.data?.message === "User Successfully Login") {
+        const userData = response?.data?.data;
+        localStorage.setItem("token", response?.data?.token);
+        localStorage.setItem("user", JSON.stringify(userData));
+
+        setUserEmailLogin("");
+        setUserPasswordLogin("");
+
+        
+        if (userData.role === "patient") {
+          navigate("/dashboard");
+        } else if (userData.role === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          
+          Swal.fire({
+            icon: "error",
+            title: "Access Denied",
+            text: "You are not authorized to access the platform.",
+            confirmButtonColor: "#ef4444",
+          }).then(() => {
+            localStorage.clear();
+            navigate("/login");
+          });
+        }
+
         return Swal.fire({
           icon: "success",
           title: "Logged In successfully",
-          confirmButtonColor: "#22c55e"
-        }).then(() => {
-          setUserEmailLogin("")
-          setUserPasswordLogin("")
-          localStorage.setItem("token", response?.data?.token);
-
-          // Save user info
-          localStorage.setItem("user", JSON.stringify(response?.data?.data));
-          navigate("/dashboard")
+          confirmButtonColor: "#22c55e",
         });
+      }
 
       if (response?.data?.message == "Please Verify your Account first") {
         return Swal.fire({
@@ -312,7 +331,7 @@ const Login = ({ setUser }) => {
                 Good to see you again!
               </h2>
               <p className="text-xl text-blue-100 mb-8 max-w-md mx-auto leading-relaxed">
-                Access your account and continue where you left off. Your journey awaits!
+                AI Clinic Management + Smart Diagnosis SaaS Platform for Streamlined Healthcare Operations and Intelligent Patient Care.
               </p>
 
             </div>

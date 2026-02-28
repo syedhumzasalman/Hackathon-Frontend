@@ -52,9 +52,9 @@ const Signup = () => {
 
       const baseURL = import.meta.env.VITE_BASE_URL
       const response = await axios.post(`${baseURL}api/signup`, userObj)
-      console.log("response", response);
+      // console.log("response", response);
 
-      console.log(response.data.message);
+      // console.log(response.data.message);
 
       if (response.data.message == "User Created Successfully") {
         return Swal.fire({
@@ -312,7 +312,7 @@ const Signup = () => {
                 Welcome Aboard!
               </h2>
               <p className="text-xl text-indigo-100 mb-8 max-w-md mx-auto leading-relaxed">
-                Start your amazing journey with us. Create, collaborate, and achieve more together.
+                AI Clinic Management System is here to revolutionize healthcare. Join us and be part of the future of medicine!
               </p>
 
             </div>

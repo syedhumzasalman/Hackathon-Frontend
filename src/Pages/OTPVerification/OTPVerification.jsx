@@ -11,7 +11,7 @@ const OTPVerification = () => {
 
     const location = useLocation()
     const userEmail = location?.state?.email
-    console.log(location?.state?.email);
+    // console.log(location?.state?.email);
 
     useEffect(() => {
         if (!location?.state?.email) {
